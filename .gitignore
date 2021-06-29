@@ -1,0 +1,5 @@
+/Exactly_One_Processing/.metadata/*
+/Exactly_One_Processing/KafkaTest/target/*
+/Exactly_One_Processing/KafkaTest/.settings/*
+/Exactly_One_Processing/KafkaTest/.classpath
+/Exactly_One_Processing/KafkaTest/.project
