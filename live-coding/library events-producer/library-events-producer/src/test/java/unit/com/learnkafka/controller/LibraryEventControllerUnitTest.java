@@ -1,10 +1,8 @@
 package com.learnkafka.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learnkafka.domain.Book;
 import com.learnkafka.domain.LibraryEvent;
-import com.learnkafka.domain.LibraryEventType;
 import com.learnkafka.producer.LibraryEventProducer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +24,10 @@ public class LibraryEventControllerUnitTest {
     @Autowired
     MockMvc mockMvc;
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     @MockBean
     LibraryEventProducer libraryEventProducer;
-
-    @Autowired
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void postLibraryEvent() throws Exception {
@@ -44,17 +41,16 @@ public class LibraryEventControllerUnitTest {
         LibraryEvent libraryEvent = LibraryEvent.builder()
                 .libraryEventId(null)
                 .book(book)
-                .libraryEventType(LibraryEventType.NEW)
                 .build();
+
         String json = objectMapper.writeValueAsString(libraryEvent);
         doNothing().when(libraryEventProducer).sendLibraryEvent(isA(LibraryEvent.class));
 
-        //when
+        //expect
         mockMvc.perform(post("/v1/libraryevent")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-        //then
 
     }
 }
