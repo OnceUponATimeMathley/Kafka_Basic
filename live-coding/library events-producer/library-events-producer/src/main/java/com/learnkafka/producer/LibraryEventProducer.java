@@ -53,7 +53,7 @@ public class LibraryEventProducer {
         SendResult<Integer, String> sendResult = null;
 
         try {
-           sendResult = kafkaTemplate.sendDefault(key, value).get(1, TimeUnit.MILLISECONDS);
+           sendResult = kafkaTemplate.sendDefault(key, value).get();
         } catch (ExecutionException | InterruptedException e) {
             log.error("ExecutionException/InterruptedException sending the message and the exception is {}", e.getMessage());
             throw e;
