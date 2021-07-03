@@ -17,8 +17,6 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @Component
 @Slf4j
@@ -40,7 +38,7 @@ public class LibraryEventProducer {
         ListenableFuture<SendResult<Integer, String>> listenableFuture =
                 kafkaTemplate.sendDefault(key, value);
 
-        listenableFuture.addCallback(new ListenableFutureCallback<SendResult<Integer, String>>() {
+        listenableFuture.addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onFailure(Throwable ex) {
                 handleFailure(key, value, ex);
@@ -62,7 +60,7 @@ public class LibraryEventProducer {
 
         ListenableFuture<SendResult<Integer,String>> listenableFuture =  kafkaTemplate.send(producerRecord);
 
-        listenableFuture.addCallback(new ListenableFutureCallback<SendResult<Integer, String>>() {
+        listenableFuture.addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onFailure(Throwable ex) {
                 handleFailure(key, value, ex);
@@ -85,7 +83,7 @@ public class LibraryEventProducer {
         return new ProducerRecord<>(topic, null, key, value, recordHeaders);
     }
 
-    public SendResult<Integer, String> sendLibraryEventSynchronous(LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException, TimeoutException {
+    public SendResult<Integer, String> sendLibraryEventSynchronous(LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException{
         Integer key = libraryEvent.getLibraryEventId();
         String value = objectMapper.writeValueAsString(libraryEvent);
         SendResult<Integer, String> sendResult = null;
@@ -110,7 +108,7 @@ public class LibraryEventProducer {
         }
         catch (Throwable throwable)
         {
-            log.error("Error in OnFailure:", throwable.getMessage());
+            log.error("Error in OnFailure: {}", throwable.getMessage());
         }
     }
 
